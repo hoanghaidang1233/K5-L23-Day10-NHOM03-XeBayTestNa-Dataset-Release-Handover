@@ -1,4 +1,4 @@
 image,type,verdict,note
-000000001818,bbox_drift,,(Khanh xem) 
-000000009483,,,(Khanh xem) 
-000000022192,bbox_drift,,(Khanh xem) 
+000000001818,bbox_drift,confirmed ,(Khanh xem) 
+000000009483,class_swap,rejected ,"(Khanh xem) Detector ghi Laptop, Panoptic ghi tv"
+000000022192,bbox_drift,rejected ,"(Khanh xem) Với vật Bed, Panoptic rộng hơn Detector ở phía trên."
