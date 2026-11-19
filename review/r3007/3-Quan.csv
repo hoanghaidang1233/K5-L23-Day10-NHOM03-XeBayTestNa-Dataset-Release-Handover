@@ -1,4 +1,4 @@
 image,type,verdict,note
-000000004134,bbox_drift,True,(Quan xem) Lỗi bbox_drift đúng: Hộp P:person (xanh dương) của người đàn ông bên phải bị lệch/kéo dài quá mức sang bên trái (lấn sang cả phần tay của người đối diện), khiến IoU với D:person (đỏ) chỉ đạt 0.63.
-000000013291,instance_merge,True,(Quan xem) Lỗi instance_merge đúng: Vùng P:frisbee (xanh dương) bên trái đã gộp nhầm cả chiếc đĩa bay thứ hai nằm gần đó vào chung một instance.
-000000022589,bbox_drift,,(Quan xem) Thiếu ảnh (bạn đã tải lên trùng 2 ảnh của mã 000000004134).
+000000004134,bbox_drift,confirmed,(Quan xem) Lỗi bbox_drift đúng: Hộp P:person (xanh dương) của người đàn ông bên phải bị lệch/kéo dài quá mức sang bên trái (lấn sang cả phần tay của người đối diện), khiến IoU với D:person (đỏ) chỉ đạt 0.63.
+000000013291,instance_merge,confirmed,(Quan xem) Lỗi instance_merge đúng: Vùng P:frisbee (xanh dương) bên trái đã gộp nhầm cả chiếc đĩa bay thứ hai nằm gần đó vào chung một instance.
+000000022589,bbox_drift,rejected,(Quan xem) Thiếu ảnh (bạn đã tải lên trùng 2 ảnh của mã 000000004134).
