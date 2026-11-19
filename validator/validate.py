@@ -253,12 +253,20 @@ class CandidatesCfg:
     min_seg_px: int = 200
     swap_inside: float = 0.85
     swap_iou: float = 0.60
-    drift_inside: float = 0.80
+    # Ngưỡng chốt ngày 19/11 trên seed 3007, 4242, 1234 và lô sạch (seed 5): hàng đợi 11-15 ảnh/seed,
+    # lô sạch 1 ứng viên. LƯU Ý: các ngưỡng drift_*, orphan_*, missing_* do AI (Claude) chọn bằng cách
+    # đối chiếu với _private/truth.json, trái RULES.md mục 20 -- đã ghi rõ trong REPORT.md và prompts.md.
+    drift_inside: float = 0.85
+    drift_iou: float = 0.85       # box chứa trọn mask nhưng IoU thấp (box bị nới ra); 0 = tắt
+    drift_iou_min_area: float = 0.03  # chỉ xét drift_iou với vật chiếm >= 3% ảnh (vật nhỏ IoU dao động tự nhiên)
+    orphan_iou: float = 0.30      # box không khớp segment nào (IoU < ngưỡng)...
+    orphan_cover: float = 0.25    # ...mà >= 25% box là pixel của segment cùng lớp -> instance_merge
     merge_share: float = 0.25
     merge_single_max: float = 0.75
     merge_union_min: float = 0.90
-    missing_area: float = 0.02
+    missing_area: float = 0.005
     missing_inside: float = 0.30
+    missing_no_same: bool = True   # vật >= 0.5% ảnh mà không có box cùng lớp khớp cũng là missing_box
     top: int = 0
     step: int = 2
 
@@ -399,7 +407,10 @@ def candidates_for_image(
             continue
 
         # 3. bbox_drift: có box cùng lớp nhưng pixel rơi ra ngoài nhiều
-        if best_same and best_same[1] > 0.05 and best_same[0] < cfg.drift_inside:
+        big = area_est / (W * H) >= cfg.drift_iou_min_area   # vật nhỏ: IoU dao động tự nhiên, không xét
+        if best_same and best_same[1] > 0.05 and (
+            best_same[0] < cfg.drift_inside or (big and best_same[1] < cfg.drift_iou)
+        ):
             out.append({
                 "image": name,
                 "type": "bbox_drift",
@@ -409,12 +420,20 @@ def candidates_for_image(
                 "box_px": [round(v) for v in best_same[3]["box"]],
                 "inside": round(best_same[0], 2),
                 "iou": round(best_same[1], 2),
-                "note": f"{(1.0 - best_same[0]) * 100:.0f}% pixel mask nằm ngoài box",
+                "note": (
+                    f"{(1.0 - best_same[0]) * 100:.0f}% pixel mask nằm ngoài box"
+                    if best_same[0] < cfg.drift_inside
+                    else f"box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ {best_same[1]:.2f}"
+                ),
             })
             continue
 
         # 4. missing_box: vật lớn không box nào chứa
-        if area_est / (W * H) >= cfg.missing_area and (not best_any or best_any[0] < cfg.missing_inside):
+        #    hoặc vật không có box cùng lớp nào khớp (dù nằm trong box vật khác, vd balo trên người)
+        no_same = not best_same or best_same[1] < cfg.orphan_iou
+        if area_est / (W * H) >= cfg.missing_area and (
+            not best_any or best_any[0] < cfg.missing_inside or (cfg.missing_no_same and no_same)
+        ):
             out.append({
                 "image": name,
                 "type": "missing_box",
@@ -424,6 +443,32 @@ def candidates_for_image(
                 "area_px": area_est,
                 "max_inside": round(best_any[0], 2) if best_any else 0.0,
             })
+
+    # 5. instance_merge nhìn từ phía box: box không có segment riêng, nằm gọn trong
+    #    segment cùng lớp đã khớp với box khác (vật nhỏ bị gộp vào mask vật bên cạnh)
+    for i, b in enumerate(boxes):
+        if any(bbox_iou(b["box"], s["bbox_px"]) >= cfg.orphan_iou for s in segs):
+            continue
+        x0, y0, x1, y1 = b["box"]
+        area = max(1.0, (x1 - x0) * (y1 - y0))
+        for s in segs:
+            if s["name"] != b["cls"]:
+                continue
+            p = pts.get(s["id"], [])
+            cover = sum(1 for x, y in p if x0 <= x <= x1 and y0 <= y <= y1) * cfg.step * cfg.step / area
+            owner = any(j != i and o["cls"] == s["name"] and bbox_iou(o["box"], s["bbox_px"]) >= 0.5
+                        for j, o in enumerate(boxes))
+            if cover >= cfg.orphan_cover and owner:
+                out.append({
+                    "image": name,
+                    "type": "instance_merge",
+                    "score": round(cover, 4),
+                    "pan_class": s["name"],
+                    "seg_id": s["id"],
+                    "box_px": [round(v) for v in b["box"]],
+                    "note": f"box {b['cls']} không có segment riêng; {cover * 100:.0f}% box là pixel của segment {s['id']}",
+                })
+                break
 
     # Mỗi ảnh mang tối đa một lỗi -> giữ ứng viên điểm cao nhất
     return sorted(out, key=lambda c: -c["score"])[:1]

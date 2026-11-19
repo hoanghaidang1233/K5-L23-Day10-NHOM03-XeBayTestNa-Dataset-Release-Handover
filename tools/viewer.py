@@ -27,6 +27,11 @@ def load_candidates(path: Path) -> list[dict]:
     data = json.loads(path.read_text(encoding="utf-8"))
     if isinstance(data, dict):  # {"candidates": [...]} hoặc {"errors": [...]}
         data = data.get("candidates") or data.get("errors") or []
+    for c in data:  # validator ghi "image" và box_px [x0,y0,x1,y1]; viewer dùng "target" và bbox [x,y,w,h]
+        c.setdefault("target", c.get("image"))
+        if "bbox" not in c and "box_px" in c:
+            x0, y0, x1, y1 = c["box_px"]
+            c["bbox"] = [x0, y0, x1 - x0, y1 - y0]
     return data
 
 
@@ -99,7 +104,7 @@ def render(d, cand, classes, cats, anns, out: Path, crop: bool):
     k = 3 if min(img.size) < 300 else 2 if min(img.size) < 600 else 1
     if k > 1:
         img = img.resize((img.width * k, img.height * k), Image.NEAREST)
-    img.save(out / f"{stem}_{cand['type']}.png")
+    img.save(out / f"{stem}_{cand['type'].replace('|', '-')}.png")  # Windows cấm '|' trong tên file
 
 
 def main() -> int:
