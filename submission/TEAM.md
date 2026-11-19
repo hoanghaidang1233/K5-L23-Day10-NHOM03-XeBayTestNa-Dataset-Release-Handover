@@ -1,7 +1,8 @@
-# Nhóm <<03-XeBayTestNa>>
+# Day 10 Lab - Nhóm <<03-XeBayTestNa>>
 
-- Seed luyện tập: 3007
-- Repo: <<URL>>
+- **Seed** luyện tập: 3007
+- **Repo**: <<URL>>
+- **Day 10 Lab — Nhóm <<03-XeBayTestNa>>**
 
 | Họ và tên | MSHV | Tài khoản GitHub | Phần chính |
 |---|---|---|---|
