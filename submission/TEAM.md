@@ -1,8 +1,7 @@
-# Day 10 Lab - Nhóm <<03-XeBayTestNa>>
+# Day 10 Lab - Nhóm 03 (XeBayTestNa)
 
 - **Seed** luyện tập: 3007
-- **Repo**: <<URL>>
-- **Day 10 Lab — Nhóm <<03-XeBayTestNa>>**
+- **Repo**: https://github.com/hoanghaidang1233/K5-L23-Day10-XeBayTestNa-Dataset-Release-Handover
 
 | Họ và tên | MSHV | Tài khoản GitHub | Phần chính |
 |---|---|---|---|
