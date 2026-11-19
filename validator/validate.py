@@ -460,6 +460,59 @@ def find_candidates(delivery_dir: Path, cfg: CandidatesCfg) -> list[dict]:
     return result[: cfg.top] if cfg.top else result
 
 
+def pct(vals: list[float], q: float) -> float | None:
+    v = sorted(vals)
+    return v[min(len(v) - 1, int(q / 100.0 * len(v)))] if v else None
+
+
+def dump_stats(delivery_dir: Path, step: int = 2):
+    d = Path(delivery_dir)
+    cats, names80, sizes, anns = load_candidate_meta(d)
+    inside_same, iou_same, large_seg_max_inside = [], [], []
+
+    for name, (W, H) in sorted(sizes.items()):
+        ann = anns.get(name)
+        if not ann:
+            continue
+        segs = [
+            dict(s, name=cats[s["category_id"]]["name"])
+            for s in ann.get("segments_info", [])
+            if s.get("category_id") in cats and cats[s["category_id"]].get("isthing") and not s.get("iscrowd")
+        ]
+        png = d / "masks" / f"{name}.png"
+        if not segs or not png.is_file():
+            continue
+        pts = mask_points(png, {s["id"] for s in segs}, step=step)
+        boxes = read_candidate_boxes(d / "labels" / f"{name}.txt", W, H, names80)
+        for s in segs:
+            p = pts.get(s["id"], [])
+            if not p:
+                continue
+            xs, ys = [q[0] for q in p], [q[1] for q in p]
+            s_box = (min(xs) - 0.5, min(ys) - 0.5, max(xs) + 0.5, max(ys) + 0.5)
+            scores = [(inside_ratio(p, b["box"]), bbox_iou(b["box"], s_box), b["cls"]) for b in boxes]
+            same = [t for t in scores if t[2] == s["name"]]
+            if same:
+                best_same = max(same, key=lambda t: t[0] * t[1])
+                if best_same[1] > 0.05:
+                    inside_same.append(best_same[0])
+                    iou_same.append(best_same[1])
+            area_est = len(p) * (step * step)
+            if area_est / (W * H) >= 0.02:
+                max_in = max((t[0] for t in scores), default=0.0)
+                large_seg_max_inside.append(max_in)
+
+    print("=== PHÂN BỐ SỐ ĐO TRÊN LÔ DỮ LIỆU ===")
+    print(f"Tổng số cặp cùng lớp: {len(inside_same)}")
+    for q in (1, 5, 10, 50):
+        print(f"  inside p{q:02d}: {pct(inside_same, q):.3f}")
+    for q in (1, 5, 10, 50):
+        print(f"  iou    p{q:02d}: {pct(iou_same, q):.3f}")
+    print(f"Tổng số segment lớn (>=2% ảnh): {len(large_seg_max_inside)}")
+    for q in (1, 5, 10, 50):
+        print(f"  large_seg max_inside p{q:02d}: {pct(large_seg_max_inside, q):.3f}")
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="Validator luật cho lô dataset và sinh ứng viên")
     ap.add_argument("delivery", type=Path)
@@ -469,6 +522,7 @@ def main() -> int:
     ap.add_argument("--missing-area", type=float, default=None, help="Ngưỡng missing box area")
     ap.add_argument("--top", type=int, default=None, help="Giới hạn số lượng ứng viên đầu")
     ap.add_argument("--step", type=int, default=2, help="Bước lấy mẫu đọc mask (mặc định 2)")
+    ap.add_argument("--dump-stats", action="store_true", help="In phân bố số đo để chọn ngưỡng")
     args = ap.parse_args()
 
     errors = validate(args.delivery)
@@ -477,6 +531,9 @@ def main() -> int:
         json.dumps({"errors": errors}, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     print(f"{len(errors)} lỗi -> {args.out}")
+
+    if args.dump_stats:
+        dump_stats(args.delivery, step=args.step)
 
     if args.candidates:
         cfg = CandidatesCfg()

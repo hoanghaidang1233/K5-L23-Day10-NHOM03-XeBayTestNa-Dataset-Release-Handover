@@ -2,4 +2,4 @@
 
 | # | Ai dùng | Công cụ | Prompt (tóm tắt) | AI sai ở đâu | Nhóm kiểm lại thế nào |
 |---|---|---|---|---|---|
-| 1 | <<>> | <<>> | <<>> | <<>> | <<>> |
+| 1 | Nguyễn Thiên Phúc | Antigravity (Gemini) | Viết module đối chiếu box YOLO ↔ panoptic mask (inside ratio, iou), sinh 4 nhóm ứng viên (swap, drift, missing, merge), đo phân bố lô sạch để chọn ngưỡng | Ban đầu tính diện tích segment bằng len(p) khi lấy mẫu step=2 khiến số pixel bị hụt 4 lần; dùng IoU bbox thuần túy để bắt merge sinh nhiều ứng viên giả | Sửa diện tích len(p) * step², kiểm tra hợp các box (inside_union) cho merge; chạy đo trên runs/clean (1 ứng viên tự nhiên) và runs/r3007 (9 ứng viên) |
