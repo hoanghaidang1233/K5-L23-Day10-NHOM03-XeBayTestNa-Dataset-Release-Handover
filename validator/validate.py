@@ -16,11 +16,12 @@ import hashlib
 import json
 import sys
 from collections import Counter, defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts"))
-from pngutil import read_rgb  # noqa: E402
+from pngutil import read_rgb, segment_id  # noqa: E402
 
 # Ngưỡng dùng chung cho mọi seed. Chỉnh trên lô sạch (inject_release.py --no-faults),
 # không chỉnh theo đáp án.
@@ -244,10 +245,230 @@ def validate(delivery: Path) -> list[dict]:
     return sorted(errors, key=lambda e: (e["type"], e["target"]))
 
 
+# ================================================================
+# Pha 2: Đối chiếu detection <-> panoptic (candidates)
+# ================================================================
+@dataclass
+class CandidatesCfg:
+    min_seg_px: int = 200
+    swap_inside: float = 0.85
+    swap_iou: float = 0.60
+    drift_inside: float = 0.80
+    merge_share: float = 0.25
+    merge_single_max: float = 0.75
+    merge_union_min: float = 0.90
+    missing_area: float = 0.02
+    missing_inside: float = 0.30
+    top: int = 0
+    step: int = 2
+
+
+Cfg = CandidatesCfg  # Bí danh tiện lợi tương thích mẫu code
+
+
+def load_candidate_meta(d: Path):
+    pan = json.loads((d / "panoptic.json").read_text(encoding="utf-8"))
+    cats = {c["id"]: c for c in pan.get("categories", [])}
+    names80 = {}
+    for line in (d / "classes.txt").read_text(encoding="utf-8").splitlines():
+        if line.strip():
+            cid, name = line.split(maxsplit=1)
+            names80[int(cid)] = name.strip()
+    sizes = {Path(im["file_name"]).stem: (im["width"], im["height"]) for im in pan.get("images", [])}
+    anns = {Path(a["file_name"]).stem: a for a in pan.get("annotations", [])}
+    return cats, names80, sizes, anns
+
+
+def read_candidate_boxes(path: Path, W: int, H: int, names80: dict[int, str]) -> list[dict]:
+    out = []
+    if not path.is_file():
+        return out
+    for line in path.read_text(encoding="utf-8").splitlines():
+        p = line.split()
+        if len(p) != 5:
+            continue
+        try:
+            cid = int(float(p[0]))
+        except ValueError:
+            continue
+        if cid not in names80:
+            continue
+        try:
+            xc, yc, w, h = (float(v) for v in p[1:5])
+        except ValueError:
+            continue
+        out.append({
+            "cls": names80[cid],
+            "box": ((xc - w / 2) * W, (yc - h / 2) * H, (xc + w / 2) * W, (yc + h / 2) * H),
+        })
+    return out
+
+
+def mask_points(png: Path, keep_ids: set[int], step: int = 2) -> dict[int, list[tuple[float, float]]]:
+    W, H, px = read_rgb(png)
+    pts = {sid: [] for sid in keep_ids}
+    if not keep_ids:
+        return pts
+    for y in range(0, H, step):
+        row = y * W * 3
+        for x in range(0, W, step):
+            idx = row + x * 3
+            sid = px[idx] + px[idx + 1] * 256 + px[idx + 2] * 65536
+            if sid in pts:
+                pts[sid].append((x + 0.5, y + 0.5))
+    return pts
+
+
+def inside_ratio(points: list[tuple[float, float]], box: tuple[float, float, float, float]) -> float:
+    if not points:
+        return 0.0
+    x0, y0, x1, y1 = box
+    n = sum(1 for x, y in points if x0 <= x <= x1 and y0 <= y <= y1)
+    return n / len(points)
+
+
+def inside_union(points: list[tuple[float, float]], boxes: list[tuple[float, float, float, float]]) -> float:
+    if not points or not boxes:
+        return 0.0
+    n = sum(1 for x, y in points if any(b[0] <= x <= b[2] and b[1] <= y <= b[3] for b in boxes))
+    return n / len(points)
+
+
+def bbox_iou(a: tuple[float, float, float, float], b: tuple[float, float, float, float]) -> float:
+    ix = max(0.0, min(a[2], b[2]) - max(a[0], b[0]))
+    iy = max(0.0, min(a[3], b[3]) - max(a[1], b[1]))
+    inter = ix * iy
+    union = (a[2] - a[0]) * (a[3] - a[1]) + (b[2] - b[0]) * (b[3] - b[1]) - inter
+    return inter / union if union > 0 else 0.0
+
+
+def candidates_for_image(
+    name: str,
+    boxes: list[dict],
+    segs: list[dict],
+    pts: dict[int, list[tuple[float, float]]],
+    W: int,
+    H: int,
+    cfg: CandidatesCfg,
+) -> list[dict]:
+    out = []
+    for s in segs:
+        p = pts.get(s["id"], [])
+        area_est = len(p) * (cfg.step * cfg.step)
+        if area_est < cfg.min_seg_px:
+            continue
+        scores = [(inside_ratio(p, b["box"]), bbox_iou(b["box"], s["bbox_px"]), i, b) for i, b in enumerate(boxes)]
+        same = [t for t in scores if t[3]["cls"] == s["name"]]
+        best_any = max(scores, key=lambda t: t[0] * t[1], default=None)
+        best_same = max(same, key=lambda t: t[0] * t[1], default=None)
+
+        # 1. instance_merge: mask trải ra >= 2 box cùng lớp
+        spread = [t for t in same if t[0] >= cfg.merge_share]
+        union = inside_union(p, [t[3]["box"] for t in spread])
+        if len(spread) >= 2 and best_same and best_same[0] < cfg.merge_single_max and union >= cfg.merge_union_min:
+            out.append({
+                "image": name,
+                "type": "instance_merge",
+                "score": sum(t[0] for t in spread),
+                "pan_class": s["name"],
+                "seg_id": s["id"],
+                "n_boxes": len(spread),
+                "shares": [round(t[0], 2) for t in spread],
+            })
+            continue
+
+        # 2. class_swap | category_swap: trùng chỗ với box khác lớp, không có box cùng lớp tốt
+        if (
+            best_any
+            and best_any[3]["cls"] != s["name"]
+            and best_any[0] >= cfg.swap_inside
+            and best_any[1] >= cfg.swap_iou
+            and (not best_same or best_same[1] < cfg.swap_iou)
+        ):
+            out.append({
+                "image": name,
+                "type": "class_swap|category_swap",
+                "score": round(best_any[0] * best_any[1], 4),
+                "det_class": best_any[3]["cls"],
+                "pan_class": s["name"],
+                "seg_id": s["id"],
+                "box_px": [round(v) for v in best_any[3]["box"]],
+                "inside": round(best_any[0], 2),
+                "iou": round(best_any[1], 2),
+            })
+            continue
+
+        # 3. bbox_drift: có box cùng lớp nhưng pixel rơi ra ngoài nhiều
+        if best_same and best_same[1] > 0.05 and best_same[0] < cfg.drift_inside:
+            out.append({
+                "image": name,
+                "type": "bbox_drift",
+                "score": round(1.0 - best_same[0], 4),
+                "pan_class": s["name"],
+                "seg_id": s["id"],
+                "box_px": [round(v) for v in best_same[3]["box"]],
+                "inside": round(best_same[0], 2),
+                "iou": round(best_same[1], 2),
+                "note": f"{(1.0 - best_same[0]) * 100:.0f}% pixel mask nằm ngoài box",
+            })
+            continue
+
+        # 4. missing_box: vật lớn không box nào chứa
+        if area_est / (W * H) >= cfg.missing_area and (not best_any or best_any[0] < cfg.missing_inside):
+            out.append({
+                "image": name,
+                "type": "missing_box",
+                "score": round(area_est / (W * H), 4),
+                "pan_class": s["name"],
+                "seg_id": s["id"],
+                "area_px": area_est,
+                "max_inside": round(best_any[0], 2) if best_any else 0.0,
+            })
+
+    # Mỗi ảnh mang tối đa một lỗi -> giữ ứng viên điểm cao nhất
+    return sorted(out, key=lambda c: -c["score"])[:1]
+
+
+def find_candidates(delivery_dir: Path, cfg: CandidatesCfg) -> list[dict]:
+    d = Path(delivery_dir)
+    cats, names80, sizes, anns = load_candidate_meta(d)
+    result = []
+    for name, (W, H) in sorted(sizes.items()):
+        ann = anns.get(name)
+        if not ann:
+            continue
+        segs = [
+            dict(s, name=cats[s["category_id"]]["name"])
+            for s in ann.get("segments_info", [])
+            if s.get("category_id") in cats and cats[s["category_id"]].get("isthing") and not s.get("iscrowd")
+        ]
+        png = d / "masks" / f"{name}.png"
+        if not segs or not png.is_file():
+            continue
+        pts = mask_points(png, {s["id"] for s in segs}, step=cfg.step)
+        for s in segs:
+            p = pts.get(s["id"], [])
+            if p:
+                xs = [q[0] for q in p]
+                ys = [q[1] for q in p]
+                s["bbox_px"] = (min(xs) - 0.5, min(ys) - 0.5, max(xs) + 0.5, max(ys) + 0.5)
+        segs = [s for s in segs if "bbox_px" in s]
+        boxes = read_candidate_boxes(d / "labels" / f"{name}.txt", W, H, names80)
+        result += candidates_for_image(name, boxes, segs, pts, W, H, cfg)
+
+    result.sort(key=lambda c: -c["score"])
+    return result[: cfg.top] if cfg.top else result
+
+
 def main() -> int:
-    ap = argparse.ArgumentParser(description="Validator luật cho lô dataset")
+    ap = argparse.ArgumentParser(description="Validator luật cho lô dataset và sinh ứng viên")
     ap.add_argument("delivery", type=Path)
     ap.add_argument("--out", required=True, type=Path)
+    ap.add_argument("--candidates", type=Path, default=None, help="Đường dẫn xuất candidates.json")
+    ap.add_argument("--drift-inside", type=float, default=None, help="Ngưỡng drift inside")
+    ap.add_argument("--missing-area", type=float, default=None, help="Ngưỡng missing box area")
+    ap.add_argument("--top", type=int, default=None, help="Giới hạn số lượng ứng viên đầu")
+    ap.add_argument("--step", type=int, default=2, help="Bước lấy mẫu đọc mask (mặc định 2)")
     args = ap.parse_args()
 
     errors = validate(args.delivery)
@@ -256,6 +477,25 @@ def main() -> int:
         json.dumps({"errors": errors}, indent=1, ensure_ascii=False) + "\n", encoding="utf-8"
     )
     print(f"{len(errors)} lỗi -> {args.out}")
+
+    if args.candidates:
+        cfg = CandidatesCfg()
+        if args.drift_inside is not None:
+            cfg.drift_inside = args.drift_inside
+        if args.missing_area is not None:
+            cfg.missing_area = args.missing_area
+        if args.top is not None:
+            cfg.top = args.top
+        if args.step is not None:
+            cfg.step = args.step
+
+        cands = find_candidates(args.delivery, cfg)
+        args.candidates.parent.mkdir(parents=True, exist_ok=True)
+        args.candidates.write_text(
+            json.dumps({"candidates": cands}, indent=1, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        print(f"{len(cands)} ứng viên -> {args.candidates}")
     return 0
 
 
