@@ -27,7 +27,7 @@ from pngutil import read_rgb, segment_id  # noqa: E402
 # không chỉnh theo đáp án.
 BOX_EDGE_TOL = 1e-6   # sai số (theo tỉ lệ 0-1) cho box vượt mép ảnh
 DUP_SIZE_TOL = 1.0    # px: hai box được coi là cùng kích thước nếu lệch <= giá trị này
-DUP_SHIFT_TOL = 2.0   # px: lệch tâm tối đa của box bị lặp
+DUP_SHIFT_TOL = 3.0   # px: lệch tâm tối đa của box bị lặp (2.0 sót ca lệch 2.0002 px do làm tròn số thực)
 AREA_TOL = 0          # px: area khai nhiều hơn số pixel thật quá mức này là lỗi
 
 
