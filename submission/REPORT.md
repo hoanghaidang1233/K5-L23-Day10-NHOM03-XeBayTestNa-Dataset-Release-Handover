@@ -62,7 +62,13 @@ Ticket của team AI nói mô hình hay bỏ sót `bottle` khi bị che hoặc n
 
 **Vì sao lấy guideline theo job:** người gán nhãn làm theo hướng dẫn được giao trong job, nên guideline ghi trong `jobs.csv` mới là phiên bản thực sự đã dùng. Trường `guideline_version` của từng ảnh trong `metadata.json` có thể bị ghi sai, và đó chính là lỗi `guideline_mismatch`. Ở seed 3007 có 2 ảnh như vậy, `000000002157` và `000000003553`: job J02 dùng v1.2 nhưng ảnh ghi v1.3. Hai ảnh này không có `bottle` nên không làm đổi kết quả seed này, nhưng ở lô khác, nếu lấy theo ảnh sẽ bỏ sót hoặc báo thừa.
 
-Đã đối chiếu: chạy lại bằng một đoạn kiểm độc lập ra đúng `tier_a`, `tier_b`, `notify` như `trace.json`; chạy thử trên seed 1234 và 4242 vẫn ra kết quả (lớp, cảnh, job tự đổi theo lô), nên dùng lại được cho đề ẩn.
+Đã đối chiếu: chạy lại bằng một đoạn kiểm độc lập ra đúng `tier_a`, `tier_b`, `notify` như `trace.json`; chạy thử trên seed 1234 và 4242 vẫn ra kết quả (lớp, cảnh, job tự đổi theo lô), nên dùng lại được cho đề ẩn. Trên seed 9999 (diễn tập, chưa từng chạy trước đó) script tự tìm ra lớp `bottle`, cảnh `scene_234`, `scene_392`, job cũ J01–J03 và ra tier_a 4 ảnh, tier_b 3 ảnh, notify A04, Q01.
+
+**Kiểm chéo v2** (`truyvet.csv`, `label_summary.csv`) bằng một đoạn kiểm độc lập với `make_v2.py`, chỉ đọc `delivery/` và gói v2:
+- `truyvet.csv`: 240 dòng, khớp đúng 240 ảnh trong `images/`, không trùng dòng. Mọi dòng có job, cảnh khớp `metadata.json`; annotator, reviewer, guideline khớp `jobs.csv` (J01–J04 là v1.2, J05–J10 là v1.3), kể cả 2 ảnh `guideline_mismatch` ở trên. Không còn cảnh nằm ở cả train và val; chỉ 1 cảnh đổi split so với v1 là `scene_214` (train → val, về split chiếm đa số).
+- `label_summary.csv`: 76 lớp, TOTAL = 1645, đếm lại từ `labels/` của v2 khớp từng lớp và khớp `README.txt` (240 ảnh, 1645 nhãn).
+
+**Diễn tập đề ẩn** trên seed 9999 (`inject_release.py --seed 9999`): validator ra 9 lỗi luật và 10 ứng viên trong khoảng 19 giây, `trace_query.py` dưới 1 giây, viewer vẽ 10 ảnh chia 5 phần (2 ảnh/người) trong khoảng 2 giây, `merge_review.py` chạy được. Phần tự động mất chưa tới 1 phút, nên gần như toàn bộ 40 phút dành cho xem ảnh và ghi `review_log.csv`. Phần xem ảnh chưa diễn tập.
 
 ## 6. Bug hoặc điểm chưa rõ trong lab (nếu có)
 - Không phát hiện bug trong các script của đề.
