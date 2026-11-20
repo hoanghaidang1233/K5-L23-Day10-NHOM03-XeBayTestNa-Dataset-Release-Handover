@@ -1,3 +1,3 @@
 image,type,verdict,note
-000000000632,missing_box,,(Dang xem) 
-000000009769,,,(Dang xem) 
+000000000632,missing_box,confirmed,detector bỏ sót chair (bị plant che)
+000000009769,class_swap,confirmed,pickup = truck; panoptic gán nhầm car
