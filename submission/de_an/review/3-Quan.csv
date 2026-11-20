@@ -1,4 +1,4 @@
 image,type,verdict,note
-img_0017,bbox_drift,,(Quan xem) 
-img_0115,missing_box,,(Quan xem) 
-img_0181,bbox_drift,,(Quan xem) 
+img_0017,bbox_drift,False,(Quan xem) Không phải lỗi bbox_drift: Hộp P:truck (xanh dương) ôm sát và khớp hoàn toàn với mask của xe tải; iou=0.67 giảm là do hộp D:truck (đỏ) bị lệch lên trên và cắt hụt phần bánh xe.[cite: 6]
+img_0115,missing_box,False,(Quan xem) Không phải lỗi missing_box: Chiếc cốc vẫn có đầy đủ cả hộp D:cup (đỏ) và P:cup (xanh dương), chỉ là hộp P:cup bị phình rộng sang trái (lỗi sai kích thước box chứ không thiếu box).[cite: 7]
+img_0181,bbox_drift,False,(Quan xem) Không phải lỗi bbox_drift: Hộp P:person (xanh dương) bao trọn và ôm sát mask của người (inside=1.0); hộp D:person (đỏ) mới là hộp bị mở rộng thừa sang khoảng trống bên phải.[cite: 8]
