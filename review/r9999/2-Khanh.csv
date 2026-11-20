@@ -1,3 +1,3 @@
 image,type,verdict,note
-000000000872,bbox_drift,,(Khanh xem) 
-000000013659,instance_merge,,(Khanh xem) 
+000000000872,bbox_drift,confirmed,"(Khanh xem) Đối tượng là Person, Panoptic nhận diện Person, nhưng không có box Detector của đối tượng "
+000000013659,instance_merge,confirmed,"(Khanh xem) Ở góc bên trái ảnh, Panotic phủ 2 vật thể Laptop dù Dectection nhận diện được là 2 vật thể riêng biệt."
