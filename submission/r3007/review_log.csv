@@ -7,7 +7,7 @@ image,type,verdict,note
 000000022192,bbox_drift,confirmed,"(Khanh xem) Với vật Bed, Panoptic rộng hơn Detector ở phía trên."
 000000004134,bbox_drift,confirmed,"(Quan xem) Lỗi bbox_drift đúng: Hộp P:person (xanh dương) của người đàn ông bên phải bị lệch/kéo dài quá mức sang bên trái (lấn sang cả phần tay của người đối diện), khiến IoU với D:person (đỏ) chỉ đạt 0.63."
 000000013291,instance_merge,confirmed,(Quan xem) Lỗi instance_merge đúng: Vùng P:frisbee (xanh dương) bên trái đã gộp nhầm cả chiếc đĩa bay thứ hai nằm gần đó vào chung một instance.
-000000022589,bbox_drift,rejected,(Quan xem) box con cừu đằng sau bị lệch
+000000022589,bbox_drift,confirmed,(Quan xem) box con cừu đằng sau bị lệch
 000000006763,instance_merge,confirmed,"(Phuc xem) hai người đứng sát nhau, panoptic gộp chung mask nhưng detection có 2 box riêng, đúng lỗi merge"
 000000023272,class_swap,confirmed,"(Phuc xem) xe ô tô con mui kín, panoptic ghi car đúng còn detection ghi nhầm bus nên là class_swap"
 000000013659,bbox_drift,rejected,"(Phuc xem) laptop bị mép bàn che khuất một phần, box detection vẽ hợp lý, đây là lệch tự nhiên"
