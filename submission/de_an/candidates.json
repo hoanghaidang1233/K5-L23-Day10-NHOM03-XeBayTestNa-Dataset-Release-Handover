@@ -1,0 +1,238 @@
+{
+ "candidates": [
+  {
+   "image": "img_0043",
+   "type": "instance_merge",
+   "score": 1.0,
+   "pan_class": "dog",
+   "seg_id": 13554114,
+   "n_boxes": 2,
+   "shares": [
+    0.66,
+    0.34
+   ]
+  },
+  {
+   "image": "img_0157",
+   "type": "instance_merge",
+   "score": 1.0,
+   "pan_class": "person",
+   "seg_id": 10421977,
+   "n_boxes": 2,
+   "shares": [
+    0.58,
+    0.42
+   ]
+  },
+  {
+   "image": "img_0006",
+   "type": "class_swap|category_swap",
+   "score": 0.9937,
+   "det_class": "motorcycle",
+   "pan_class": "bicycle",
+   "seg_id": 15327264,
+   "box_px": [
+    0,
+    199,
+    181,
+    452
+   ],
+   "inside": 1.0,
+   "iou": 0.99
+  },
+  {
+   "image": "img_0176",
+   "type": "class_swap|category_swap",
+   "score": 0.9639,
+   "det_class": "orange",
+   "pan_class": "apple",
+   "seg_id": 10784972,
+   "box_px": [
+    12,
+    98,
+    132,
+    162
+   ],
+   "inside": 1.0,
+   "iou": 0.96
+  },
+  {
+   "image": "img_0232",
+   "type": "class_swap|category_swap",
+   "score": 0.9581,
+   "det_class": "tv",
+   "pan_class": "laptop",
+   "seg_id": 7929202,
+   "box_px": [
+    14,
+    10,
+    155,
+    124
+   ],
+   "inside": 1.0,
+   "iou": 0.96
+  },
+  {
+   "image": "img_0156",
+   "type": "class_swap|category_swap",
+   "score": 0.9557,
+   "det_class": "bicycle",
+   "pan_class": "motorcycle",
+   "seg_id": 8988239,
+   "box_px": [
+    511,
+    321,
+    624,
+    384
+   ],
+   "inside": 1.0,
+   "iou": 0.96
+  },
+  {
+   "image": "img_0092",
+   "type": "class_swap|category_swap",
+   "score": 0.8951,
+   "det_class": "fork",
+   "pan_class": "knife",
+   "seg_id": 3616475,
+   "box_px": [
+    237,
+    251,
+    289,
+    285
+   ],
+   "inside": 1.0,
+   "iou": 0.9
+  },
+  {
+   "image": "img_0023",
+   "type": "instance_merge",
+   "score": 0.8773,
+   "pan_class": "book",
+   "seg_id": 11173574,
+   "box_px": [
+    192,
+    158,
+    195,
+    166
+   ],
+   "note": "box book không có segment riêng; 88% box là pixel của segment 11173574"
+  },
+  {
+   "image": "img_0242",
+   "type": "bbox_drift",
+   "score": 0.2008,
+   "pan_class": "giraffe",
+   "seg_id": 3118743,
+   "box_px": [
+    66,
+    196,
+    221,
+    314
+   ],
+   "inside": 0.8,
+   "iou": 0.78,
+   "note": "20% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "img_0009",
+   "type": "bbox_drift",
+   "score": 0.1786,
+   "pan_class": "chair",
+   "seg_id": 6863066,
+   "box_px": [
+    333,
+    11,
+    420,
+    83
+   ],
+   "inside": 0.82,
+   "iou": 0.73,
+   "note": "18% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "img_0017",
+   "type": "bbox_drift",
+   "score": 0.1646,
+   "pan_class": "truck",
+   "seg_id": 10395446,
+   "box_px": [
+    218,
+    148,
+    468,
+    342
+   ],
+   "inside": 0.84,
+   "iou": 0.67,
+   "note": "16% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "img_0115",
+   "type": "missing_box",
+   "score": 0.01,
+   "pan_class": "cup",
+   "seg_id": 15283355,
+   "area_px": 2744,
+   "max_inside": 1.0
+  },
+  {
+   "image": "img_0098",
+   "type": "missing_box",
+   "score": 0.0097,
+   "pan_class": "horse",
+   "seg_id": 9036096,
+   "area_px": 2976,
+   "max_inside": 0.23
+  },
+  {
+   "image": "img_0218",
+   "type": "missing_box",
+   "score": 0.0087,
+   "pan_class": "person",
+   "seg_id": 4106572,
+   "area_px": 2364,
+   "max_inside": 0.16
+  },
+  {
+   "image": "img_0130",
+   "type": "missing_box",
+   "score": 0.008,
+   "pan_class": "teddy bear",
+   "seg_id": 5578131,
+   "area_px": 1128,
+   "max_inside": 0.32
+  },
+  {
+   "image": "img_0181",
+   "type": "bbox_drift",
+   "score": 0.0035,
+   "pan_class": "person",
+   "seg_id": 13657217,
+   "box_px": [
+    94,
+    7,
+    493,
+    427
+   ],
+   "inside": 1.0,
+   "iou": 0.71,
+   "note": "box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ 0.71"
+  },
+  {
+   "image": "img_0193",
+   "type": "bbox_drift",
+   "score": 0.0,
+   "pan_class": "orange",
+   "seg_id": 540134,
+   "box_px": [
+    0,
+    32,
+    612,
+    521
+   ],
+   "inside": 1.0,
+   "iou": 0.8,
+   "note": "box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ 0.80"
+  }
+ ]
+}
