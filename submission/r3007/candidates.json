@@ -1,0 +1,231 @@
+{
+ "candidates": [
+  {
+   "image": "000000013291",
+   "type": "instance_merge",
+   "score": 1.0,
+   "pan_class": "frisbee",
+   "seg_id": 13419440,
+   "n_boxes": 2,
+   "shares": [
+    0.63,
+    0.37
+   ]
+  },
+  {
+   "image": "000000023272",
+   "type": "class_swap|category_swap",
+   "score": 0.9987,
+   "det_class": "bus",
+   "pan_class": "car",
+   "seg_id": 7369075,
+   "box_px": [
+    0,
+    0,
+    499,
+    371
+   ],
+   "inside": 1.0,
+   "iou": 1.0
+  },
+  {
+   "image": "000000019742",
+   "type": "class_swap|category_swap",
+   "score": 0.9947,
+   "det_class": "vase",
+   "pan_class": "baseball bat",
+   "seg_id": 1257078,
+   "box_px": [
+    172,
+    72,
+    339,
+    347
+   ],
+   "inside": 1.0,
+   "iou": 0.99
+  },
+  {
+   "image": "000000009483",
+   "type": "class_swap|category_swap",
+   "score": 0.974,
+   "det_class": "laptop",
+   "pan_class": "tv",
+   "seg_id": 9270375,
+   "box_px": [
+    459,
+    210,
+    579,
+    349
+   ],
+   "inside": 1.0,
+   "iou": 0.97
+  },
+  {
+   "image": "000000023781",
+   "type": "class_swap|category_swap",
+   "score": 0.9289,
+   "det_class": "carrot",
+   "pan_class": "motorcycle",
+   "seg_id": 5595317,
+   "box_px": [
+    380,
+    363,
+    482,
+    422
+   ],
+   "inside": 1.0,
+   "iou": 0.93
+  },
+  {
+   "image": "000000007795",
+   "type": "bbox_drift",
+   "score": 0.863,
+   "pan_class": "bed",
+   "seg_id": 7435899,
+   "box_px": [
+    164,
+    190,
+    483,
+    311
+   ],
+   "inside": 0.14,
+   "iou": 0.33,
+   "note": "86% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "000000006763",
+   "type": "instance_merge",
+   "score": 0.8101,
+   "pan_class": "person",
+   "seg_id": 3549757,
+   "box_px": [
+    0,
+    213,
+    49,
+    335
+   ],
+   "note": "box person không có segment riêng; 81% box là pixel của segment 3549757"
+  },
+  {
+   "image": "000000013659",
+   "type": "bbox_drift",
+   "score": 0.5494,
+   "pan_class": "laptop",
+   "seg_id": 8351070,
+   "box_px": [
+    54,
+    348,
+    200,
+    461
+   ],
+   "inside": 0.45,
+   "iou": 0.27,
+   "note": "55% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "000000001818",
+   "type": "bbox_drift",
+   "score": 0.4976,
+   "pan_class": "zebra",
+   "seg_id": 8092282,
+   "box_px": [
+    178,
+    1,
+    640,
+    425
+   ],
+   "inside": 0.5,
+   "iou": 0.72,
+   "note": "50% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "000000022589",
+   "type": "bbox_drift",
+   "score": 0.1569,
+   "pan_class": "sheep",
+   "seg_id": 6189719,
+   "box_px": [
+    147,
+    207,
+    327,
+    336
+   ],
+   "inside": 0.84,
+   "iou": 0.61,
+   "note": "16% pixel mask nằm ngoài box"
+  },
+  {
+   "image": "000000022192",
+   "type": "bbox_drift",
+   "score": 0.0488,
+   "pan_class": "bed",
+   "seg_id": 9476525,
+   "box_px": [
+    0,
+    254,
+    640,
+    426
+   ],
+   "inside": 0.95,
+   "iou": 0.62,
+   "note": "box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ 0.62"
+  },
+  {
+   "image": "000000007511",
+   "type": "missing_box",
+   "score": 0.0471,
+   "pan_class": "person",
+   "seg_id": 3026996,
+   "area_px": 14480,
+   "max_inside": 0.0
+  },
+  {
+   "image": "000000000872",
+   "type": "bbox_drift",
+   "score": 0.0446,
+   "pan_class": "person",
+   "seg_id": 12234672,
+   "box_px": [
+    145,
+    101,
+    437,
+    558
+   ],
+   "inside": 0.96,
+   "iou": 0.78,
+   "note": "box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ 0.78"
+  },
+  {
+   "image": "000000018150",
+   "type": "bbox_drift",
+   "score": 0.0022,
+   "pan_class": "person",
+   "seg_id": 4406074,
+   "box_px": [
+    0,
+    12,
+    445,
+    480
+   ],
+   "inside": 1.0,
+   "iou": 0.81,
+   "note": "box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ 0.81"
+  },
+  {
+   "image": "000000004134",
+   "type": "bbox_drift",
+   "score": 0.0,
+   "pan_class": "person",
+   "seg_id": 460811,
+   "box_px": [
+    551,
+    150,
+    689,
+    425
+   ],
+   "inside": 1.0,
+   "iou": 0.63,
+   "note": "box rộng hơn vật: mask nằm trọn trong box nhưng IoU chỉ 0.63"
+  }
+ ]
+}
