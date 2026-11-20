@@ -1,5 +1,5 @@
 image,type,verdict,note
-img_0009,bbox_drift,,(Khanh xem) 
-img_0098,missing_box,,(Khanh xem) 
-img_0176,,,(Khanh xem) 
-img_0242,bbox_drift,,(Khanh xem) 
+img_0009,bbox_drift,rejected,(Khanh xem) Các Dectection và Panoptic đều thể hiện đúng vả đủ vật thể
+img_0098,missing_box,confirmed,"(Khanh xem) Đối tượng là House, Panoptic nhận diện House nhưng không có Dectection của vật"
+img_0176,class_swap,confirmed,"(Khanh xem) Ở góc trên bên trái, vật thể là Orange, Detection ghi Orange nhưng Panoptic ghi Apple"
+img_0242,bbox_drift,confirmed,"(Khanh xem) Đối tượng Giraffe thứ 2 từ dưới lên, Detection bao phủ đủ vật thể, Panoptic bị rọng hơn về phía dưới so với Detection  "
