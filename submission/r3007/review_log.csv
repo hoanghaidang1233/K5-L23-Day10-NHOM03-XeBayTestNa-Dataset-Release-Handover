@@ -1,0 +1,16 @@
+image,type,verdict,note
+000000000872,bbox_drift,rejected,"Hai cầu thủ bóng chày chạy chồng lên nhau (áo trắng phía trước che người áo xanh). Box đỏ person vẫn bao trọn mask (inside=0.96), score thấp 0.04; phần lệch do hai người che nhau, là lệch tự nhiên, không phải box trôi khỏi vật"
+000000007795,missing_box,confirmed,"Phòng có hai giường. Box đỏ D:bed khớp giường phía sau (trùng box xanh P:bed của nó). Giường lớn ở tiền cảnh có mask và box xanh P:bed nhưng không có box đỏ nào; inside=0.14 vì đang so nhầm với box của giường sau. Detection thiếu box giường trước, không phải box bị lệch"
+000000019742,category_swap,confirmed,"Vật giữa ảnh là chiếc bình thuỷ tinh màu hổ phách vẽ hình người, đặt trên đế gương. D:vase đúng, P:baseball bat sai, nên lỗi nằm ở nhãn panoptic"
+000000001818,bbox_drift,confirmed,"(Khanh xem) Ảnh có 2 con ngựa vằn, cần 2 nhãn Zebra nhưng Detector và Panoptic chỉ nhận diện là một con ngựa vằn"
+000000009483,class_swap,confirmed,"(Khanh xem) Detector ghi Laptop, Panoptic ghi tv, vật thể đúng là laptop"
+000000022192,bbox_drift,confirmed,"(Khanh xem) Với vật Bed, Panoptic rộng hơn Detector ở phía trên."
+000000004134,bbox_drift,confirmed,(Quan xem) Lỗi bbox_drift đúng: Hộp P:person (xanh dương) của người đàn ông bên phải bị lệch/kéo dài quá mức sang bên trái (lấn sang cả phần tay của người đối diện), khiến IoU với D:person (đỏ) chỉ đạt 0.63.
+000000013291,instance_merge,confirmed,(Quan xem) Lỗi instance_merge đúng: Vùng P:frisbee (xanh dương) bên trái đã gộp nhầm cả chiếc đĩa bay thứ hai nằm gần đó vào chung một instance.
+000000022589,bbox_drift,rejected,(Quan xem) Thiếu ảnh (bạn đã tải lên trùng 2 ảnh của mã 000000004134).
+000000006763,instance_merge,confirmed,"hai người đứng sát nhau, panoptic gộp chung mask nhưng detection có 2 box riêng, đúng lỗi merge"
+000000023272,class_swap,confirmed,"xe ô tô con mui kín, panoptic ghi car đúng còn detection ghi nhầm bus nên là class_swap"
+000000013659,bbox_drift,rejected,"laptop bị mép bàn che khuất một phần, box detection vẽ hợp lý, đây là lệch tự nhiên"
+000000007511,missing_box,confirmed,"Người đàn ông áo đen ở cận cảnh: rõ, rất lớn, có mask vàng và box xanh person nhưng không có box đỏ. Detection bỏ sót vật nổi bật nhất ảnh"
+000000018150,bbox_drift,rejected,"Box đỏ bao trọn mask. Phần dư nằm ở mép phải và phía dưới, nơi chân ngồi bị hộp pizza và đệm che. Không lệch khỏi vật, chỉ hơi rộng do bị che và viền mask thô"
+000000023781,category_swap,confirmed,"Vật trong box dưới cùng là củ cà rốt. D:carrot đúng, P:motorcycle sai, nên lỗi nằm ở nhãn panoptic"

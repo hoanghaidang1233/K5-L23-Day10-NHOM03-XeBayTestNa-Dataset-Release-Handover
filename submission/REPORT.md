@@ -47,6 +47,7 @@ Ngoài ra, ở đề ẩn, lỗi gán nhãn không có dòng `confirmed` kèm gh
 **Không chứng minh:**
 - **Nhãn đúng.** Hash của một file nhãn sai vẫn khớp hoàn toàn. Mọi lỗi gán nhãn (`class_swap`, `bbox_drift`, `missing_box`…) đều có hash "đúng".
 - **Ảnh đúng nội dung hoặc còn dùng được.** Hash chỉ khớp với chính nó. Ở hai ảnh `wrong_hash` (`000000006723`, `000000020247`), nhóm phải **mở ảnh kiểm** (giải mã được, đúng kích thước, đúng nội dung) rồi mới kết luận chỉ manifest v1 ghi sai và ghi hash mới. Hash không tự cho biết điều đó.
+  - Người kiểm: **Hoàng Hải Đăng** và **Trịnh Vinh Khánh** đã mở cả hai ảnh bằng mắt. `000000006723` (640×361): cảnh đường phố, dãy nhà gạch đỏ, làn đường riêng, cột đèn, cây xanh. `000000020247` (640×457): hai con gấu nâu trên nền sỏi. Cả hai hiển thị đủ khung, màu bình thường, không vỡ, không sọc, không bị cắt. Kết luận: ảnh nguyên vẹn, sha256 khác chỉ vì `manifest.json` của v1 ghi sai; v2 giữ ảnh và ghi hash mới trong `manifest.csv`.
 - **Nguồn gốc, bản quyền, quyền riêng tư.** Ảnh có khuôn mặt người thật vẫn có hash hợp lệ (xem `security.md`).
 - **Manifest đáng tin.** Nếu cả file lẫn manifest cùng bị thay thì hash vẫn khớp. Cần lineage và kênh bàn giao tin cậy để biết manifest là bản gốc.
 
