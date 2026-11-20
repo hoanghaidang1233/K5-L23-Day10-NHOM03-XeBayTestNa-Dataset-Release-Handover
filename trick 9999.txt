@@ -1,0 +1,21 @@
+Diễn tập đề ẩn trên seed 9999
+
+Mỗi người:
+
+-python scripts/inject_release.py --seed 9999 --out runs/r9999
+-python validator/validate.py runs/r9999/delivery --out runs/r9999/rules.json --candidates runs/r9999/candidates.json
+K thay bang số tương tương ung 
+1- Dang, 2-Khanh, 3-Quan, 4-Phuc, 5-Trinh
+-python tools/viewer.py runs/r9999/delivery --candidates runs/r9999/candidates.json --part K/5 --out -    runs/r9999/review_png/mine
+-explorer runs\r9999\review_png\mine
+
+Lệnh inject_release.py bỏ qua nếu máy đã có lô 9999. Lệnh validate.py phải in ra 9 lỗi và 10 ứng viên.
+
+Xem ảnh xong, điền file của mình (review/r9999/K-Ten.csv) bằng Notepad, rồi tự kiểm:
+
+Commit và push đúng file của mình:
+
+git add review/r9999/K-Ten.csv
+git commit -m "Dien tap: review phan K seed 9999"
+git pull 
+git push
