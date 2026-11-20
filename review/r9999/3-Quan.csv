@@ -1,3 +1,3 @@
 image,type,verdict,note
-000000001818,bbox_drift,False,(Quan xem) Không phải lỗi bbox_drift: Hộp P:zebra (xanh dương) ôm sát và khớp hoàn toàn với mask của ngựa con; chỉ số inside=0.5 thấp là do hộp D:zebra (đỏ) bị kéo lệch cạnh trái sang phần thân ngựa mẹ.
-000000013923,bbox_drift,False,(Quan xem) Không phải lỗi bbox_drift: Tại vùng ghế box_px=[244, 287, 338, 410], hộp P:chair (xanh dương) và D:chair (đỏ) trùng khít nhau (iou=0.82, inside=0.88, score=0.1241), không bị lệch vị trí.
+000000001818,bbox_drift,rejected,(Quan xem) Không phải lỗi bbox_drift: Hộp P:zebra (xanh dương) ôm sát và khớp hoàn toàn với mask của ngựa con; chỉ số inside=0.5 thấp là do hộp D:zebra (đỏ) bị kéo lệch cạnh trái sang phần thân ngựa mẹ.
+000000013923,bbox_drift,rejected,(Quan xem) Không phải lỗi bbox_drift: Tại vùng ghế box_px=[244, 287, 338, 410], hộp P:chair (xanh dương) và D:chair (đỏ) trùng khít nhau (iou=0.82, inside=0.88, score=0.1241), không bị lệch vị trí.
