@@ -1,4 +1,4 @@
 image,type,verdict,note
 img_0043,instance_merge,confirmed,(Trinh xem) Box xanh chung cho cả hai con chó thay vì mỗi đối tượng một box
-img_0156,category_swap,confirmed,(Trinh xem) Xe đạp bên phải motorcycle: sai
+img_0156,category_swap,confirmed,"(Trinh xem) Xe bên phải là xe đạp: detection ghi bicycle đúng, panoptic ghi motorcycle sai"
 img_0218,missing_box,confirmed,(Trinh xem) Người áo xanh dương bên trái thiếu box đỏ

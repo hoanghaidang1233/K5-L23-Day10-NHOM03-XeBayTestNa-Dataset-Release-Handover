@@ -1,5 +1,5 @@
 image,type,verdict,note
-img_0006,class_swap,confirmed,"(Dang xem) Xe bên trái là touring motorcycle (có fairing, đèn đôi), panoptic gán nhầm bicycle. Sửa nhãn P."
+img_0006,category_swap,confirmed,"(Dang xem) Xe bên trái là touring motorcycle (có fairing, đèn đôi), panoptic gán nhầm bicycle. Sửa nhãn P."
 img_0092,class_swap,rejected,"(Dang xem) Vật nhỏ trong tay, ảnh quá nhỏ và mờ nên không phân biệt được fork hay knife."
 img_0157,instance_merge,rejected,"(Dang xem) Một segment person phủ cả hai tay quanh cái sandwich, rất có thể cùng một người nên merge là hợp lệ."
 img_0232,class_swap,confirmed,"(Dang xem) Vật là laptop đang mở, detector gán nhầm tv. Sửa nhãn D."
@@ -14,5 +14,5 @@ img_0023,instance_merge,rejected,"(Phuc xem) hàng sách trên kệ có các gá
 img_0130,missing_box,confirmed,"(Phuc xem) trên ảnh có 2 con gấu bông (teddy bear), panoptic có 2 segment nhưng detection chỉ gán nhãn 1 con, thiếu box cho con gấu thứ hai"
 img_0193,bbox_drift,rejected,"(Phuc xem) mask quả cam (orange) nằm trọn trong box detection (inside 1.0), IoU đạt 0.80, box bao trọn đĩa cam, đây là lệch tự nhiên COCO"
 img_0043,instance_merge,confirmed,(Trinh xem) Box xanh chung cho cả hai con chó thay vì mỗi đối tượng một box
-img_0156,category_swap,confirmed,(Trinh xem) Xe đạp bên phải motorcycle: sai
+img_0156,category_swap,confirmed,"(Trinh xem) Xe bên phải là xe đạp: detection ghi bicycle đúng, panoptic ghi motorcycle sai"
 img_0218,missing_box,confirmed,(Trinh xem) Người áo xanh dương bên trái thiếu box đỏ

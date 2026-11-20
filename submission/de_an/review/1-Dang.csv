@@ -1,5 +1,5 @@
 image,type,verdict,note
-img_0006,class_swap,confirmed,"(Dang xem) Xe bên trái là touring motorcycle (có fairing, đèn đôi), panoptic gán nhầm bicycle. Sửa nhãn P."
+img_0006,category_swap,confirmed,"(Dang xem) Xe bên trái là touring motorcycle (có fairing, đèn đôi), panoptic gán nhầm bicycle. Sửa nhãn P."
 img_0092,class_swap,rejected,"(Dang xem) Vật nhỏ trong tay, ảnh quá nhỏ và mờ nên không phân biệt được fork hay knife."
 img_0157,instance_merge,rejected,"(Dang xem) Một segment person phủ cả hai tay quanh cái sandwich, rất có thể cùng một người nên merge là hợp lệ."
 img_0232,class_swap,confirmed,"(Dang xem) Vật là laptop đang mở, detector gán nhầm tv. Sửa nhãn D."

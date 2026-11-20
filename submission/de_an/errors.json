@@ -14,11 +14,11 @@
   },
   {
    "type": "category_swap",
-   "target": "img_0156"
+   "target": "img_0006"
   },
   {
-   "type": "class_swap",
-   "target": "img_0006"
+   "type": "category_swap",
+   "target": "img_0156"
   },
   {
    "type": "class_swap",
