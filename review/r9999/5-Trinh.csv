@@ -1,3 +1,3 @@
 image,type,verdict,note
-000000006763,missing_box,,(Trinh xem) 
-000000017115,,,(Trinh xem) 
+000000006763,missing_box,confirmed,(Trinh xem) Người đàn ông đằng sau có box xanh và mask vàng nhưng không có box đỏ
+000000017115,category_swap,confirmed,"(Trinh xem) Con ngựa vằn bên trái: D:zebra đúng, P:tennis racket sai. Trong ảnh không có vợt tennis nào"
