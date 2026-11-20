@@ -1,4 +1,4 @@
 image,type,verdict,note
-img_0023,instance_merge,,(Phuc xem) 
-img_0130,missing_box,,(Phuc xem) 
-img_0193,bbox_drift,,(Phuc xem) 
+img_0023,instance_merge,rejected,"hàng sách trên kệ có các gáy sách siêu nhỏ (rộng 2px), mỗi cuốn đều có segment và box riêng, không phải lỗi instance_merge"
+img_0130,missing_box,confirmed,"trên ảnh có 2 con gấu bông (teddy bear), panoptic có 2 segment nhưng detection chỉ gán nhãn 1 con, thiếu box cho con gấu thứ hai"
+img_0193,bbox_drift,rejected,"mask quả cam (orange) nằm trọn trong box detection (inside 1.0), IoU đạt 0.80, box bao trọn đĩa cam, đây là lệch tự nhiên COCO"
