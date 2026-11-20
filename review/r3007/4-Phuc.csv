@@ -1,4 +1,4 @@
 image,type,verdict,note
-000000006763,instance_merge,confirmed,"hai người đứng sát nhau, panoptic gộp chung mask nhưng detection có 2 box riêng, đúng lỗi merge"
-000000023272,class_swap,confirmed,"xe ô tô con mui kín, panoptic ghi car đúng còn detection ghi nhầm bus nên là class_swap"
-000000013659,bbox_drift,rejected,"laptop bị mép bàn che khuất một phần, box detection vẽ hợp lý, đây là lệch tự nhiên"
+000000006763,instance_merge,confirmed,"(Phuc xem) hai người đứng sát nhau, panoptic gộp chung mask nhưng detection có 2 box riêng, đúng lỗi merge"
+000000023272,class_swap,confirmed,"(Phuc xem) xe ô tô con mui kín, panoptic ghi car đúng còn detection ghi nhầm bus nên là class_swap"
+000000013659,bbox_drift,rejected,"(Phuc xem) laptop bị mép bàn che khuất một phần, box detection vẽ hợp lý, đây là lệch tự nhiên"

@@ -1,4 +1,4 @@
 image,type,verdict,note
-000000000872,bbox_drift,rejected,"Hai cầu thủ bóng chày chạy chồng lên nhau (áo trắng phía trước che người áo xanh). Box đỏ person vẫn bao trọn mask (inside=0.96), score thấp 0.04; phần lệch do hai người che nhau, là lệch tự nhiên, không phải box trôi khỏi vật"
-000000007795,missing_box,confirmed,"Phòng có hai giường. Box đỏ D:bed khớp giường phía sau (trùng box xanh P:bed của nó). Giường lớn ở tiền cảnh có mask và box xanh P:bed nhưng không có box đỏ nào; inside=0.14 vì đang so nhầm với box của giường sau. Detection thiếu box giường trước, không phải box bị lệch"
-000000019742,category_swap,confirmed,"Vật giữa ảnh là chiếc bình thuỷ tinh màu hổ phách vẽ hình người, đặt trên đế gương. D:vase đúng, P:baseball bat sai, nên lỗi nằm ở nhãn panoptic"
+000000000872,bbox_drift,rejected,"(Dang xem) Hai cầu thủ bóng chày chạy chồng lên nhau (áo trắng phía trước che người áo xanh). Box đỏ person vẫn bao trọn mask (inside=0.96), score thấp 0.04; phần lệch do hai người che nhau, là lệch tự nhiên, không phải box trôi khỏi vật"
+000000007795,missing_box,confirmed,"(Dang xem) Phòng có hai giường. Box đỏ D:bed khớp giường phía sau (trùng box xanh P:bed của nó). Giường lớn ở tiền cảnh có mask và box xanh P:bed nhưng không có box đỏ nào; inside=0.14 vì đang so nhầm với box của giường sau. Detection thiếu box giường trước, không phải box bị lệch"
+000000019742,category_swap,confirmed,"(Dang xem) Vật giữa ảnh là chiếc bình thuỷ tinh màu hổ phách vẽ hình người, đặt trên đế gương. D:vase đúng, P:baseball bat sai, nên lỗi nằm ở nhãn panoptic"

@@ -1,4 +1,4 @@
 image,type,verdict,note
-000000007511,missing_box,confirmed,"Người đàn ông áo đen ở cận cảnh: rõ, rất lớn, có mask vàng và box xanh person nhưng không có box đỏ. Detection bỏ sót vật nổi bật nhất ảnh"
-000000018150,bbox_drift,rejected,"Box đỏ bao trọn mask. Phần dư nằm ở mép phải và phía dưới, nơi chân ngồi bị hộp pizza và đệm che. Không lệch khỏi vật, chỉ hơi rộng do bị che và viền mask thô"
-000000023781,category_swap,confirmed,"Vật trong box dưới cùng là củ cà rốt. D:carrot đúng, P:motorcycle sai, nên lỗi nằm ở nhãn panoptic"
+000000007511,missing_box,confirmed,"(Trinh xem) Người đàn ông áo đen ở cận cảnh: rõ, rất lớn, có mask vàng và box xanh person nhưng không có box đỏ. Detection bỏ sót vật nổi bật nhất ảnh"
+000000018150,bbox_drift,rejected,"(Trinh xem) Box đỏ bao trọn mask. Phần dư nằm ở mép phải và phía dưới, nơi chân ngồi bị hộp pizza và đệm che. Không lệch khỏi vật, chỉ hơi rộng do bị che và viền mask thô"
+000000023781,category_swap,confirmed,git add review/r3007 submission/prompts.md submission/r3007/review_log.csv
