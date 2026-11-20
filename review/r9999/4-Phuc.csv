@@ -1,3 +1,3 @@
 image,type,verdict,note
-000000004134,bbox_drift,,(Phuc xem) 
-000000015751,,,(Phuc xem) 
+000000004134,bbox_drift,rejected,"mask người nằm trọn trong box (inside 1.0), box rộng do tràn mép ảnh chứ không phải lỗi bbox_drift"
+000000015751,class_swap,confirmed,"con chim đậu trên mái nhà, panoptic ghi bird đúng còn detection ghi nhầm kite nên là class_swap"
