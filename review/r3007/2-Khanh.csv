@@ -1,4 +1,4 @@
 image,type,verdict,note
-000000001818,bbox_drift,confirmed,"(Khanh xem) Ảnh có 2 con ngựa vằn, cần 2 nhãn Zebra nhưng Detector và Panoptic chỉ nhận diện là một con ngựa vằn"
-000000009483,class_swap,confirmed,"(Khanh xem) Detector ghi Laptop, Panoptic ghi tv, vật thể đúng là laptop"
-000000022192,bbox_drift,confirmed,"(Khanh xem) Với vật Bed, Panoptic rộng hơn Detector ở phía trên."
+000000001818,bbox_drift,confirmed," Ảnh có 2 con ngựa vằn, cần 2 nhãn Zebra nhưng Detector và Panoptic chỉ nhận diện là một con ngựa vằn"
+000000009483,class_swap,confirmed," Detector ghi Laptop, Panoptic ghi tv, vật thể đúng là laptop"
+000000022192,bbox_drift,confirmed," Với vật Bed, Panoptic rộng hơn Detector ở phía trên."
