@@ -5,7 +5,7 @@
 
   | Seed | rule | cross_check | overall | Ghi chú |
   |---|---:|---:|---:|---|
-  | 3007 (luyện tập) | ≈ 1.0 | ≈ 0.8 | ≈ 0.9 | 22 lỗi nộp = 11 lỗi luật + 11 lỗi gán nhãn `confirmed` sau review |
+  | 3007 (luyện tập) | ≈ 1.0 | ≈ 0.8 | ≈ 0.9 | 23 lỗi nộp = 11 lỗi luật + 12 lỗi gán nhãn `confirmed` sau review |
   | 1234 | ≈ 1.0 | — | ≈ 0.7 | chỉ chạy luật, không review ảnh |
   | 4242 | ≈ 1.0 | — | ≈ 0.8 | chỉ chạy luật, không review ảnh |
   | clean (seed 5, `--no-faults`) | ≈ 1.0 | ≈ 1.0 | ≈ 1.0 | 0 lỗi luật báo ra |
@@ -24,20 +24,20 @@ Số đo trên seed 3007 (cùng 11 lỗi luật, chỉ khác phần lỗi gán n
 | Cách nộp | Số lỗi nộp | cross_check F1 | overall F1 |
 |---|---:|---:|---:|
 | Nhận hết 15 ứng viên không xem ảnh (4 ứng viên `class_swap\|category_swap` phải báo cả hai loại vì không xem ảnh thì không biết bên nào sai) | 30 | ≈ 0.6 | ≈ 0.8 |
-| Sau review bằng mắt: 11 `confirmed`, 4 `rejected` | 22 | ≈ 0.8 | ≈ 0.9 |
+| Sau review bằng mắt: 12 `confirmed`, 3 `rejected` | 23 | ≈ 0.8 | ≈ 0.9 |
 
 Hai lý do khiến F1 giảm khi nhận hết:
-1. Các ca lệch tự nhiên thành FP: 000000000872 (hai người che nhau), 000000013659 (laptop bị mép bàn che), 000000018150 (người ngồi bị hộp pizza che). Dòng rejected thứ tư, 000000022589, do lúc review bị thiếu ảnh. Nhóm không nhận lỗi khi chưa nhìn thấy vật.
+1. Các ca lệch tự nhiên thành FP: 000000000872 (hai người che nhau), 000000013659 (laptop bị mép bàn che), 000000018150 (người ngồi bị hộp pizza che). Ảnh 000000022589 lúc đầu bị ghi `rejected` vì người xem chưa mở được ảnh; sau khi mở lại, thấy box con cừu phía sau bị lệch nên đổi thành `confirmed`. Nhóm không nhận hay bỏ lỗi khi chưa nhìn thấy vật.
 2. Ca bất đồng lớp mà không xem ảnh thì phải đoán `class_swap` hay `category_swap`. Báo cả hai thì chắc chắn một cái là FP.
 
 Ngoài ra, ở đề ẩn, lỗi gán nhãn không có dòng `confirmed` kèm ghi chú sẽ bị bỏ trước khi chấm. Nhận hết mà không xem ảnh thì chỉ được điểm như chỉ kiểm luật.
 
 ## 3. Quyết định và lineage
-- **QC v1 = 20/250 = 8,0%.** `errors.json` có 22 mục nhưng tính theo ảnh lỗi: hai ảnh `000000004134` và `000000022192` mỗi ảnh có 2 mục, và `scene_214` tính 1 ảnh. 8,0% > ngưỡng 2% của Day 7 nên **v1: HOLD**, không Release.
+- **QC v1 = 21/250 = 8,4%.** `errors.json` có 23 mục nhưng tính theo ảnh lỗi: hai ảnh `000000004134` và `000000022192` mỗi ảnh có 2 mục, và `scene_214` tính 1 ảnh. 8,4% > ngưỡng 2% của Day 7 nên **v1: HOLD**, không Release.
 - Lineage (`runs/lineage.jsonl`, chép sang `submission/lineage.jsonl`): `inject` → `train R-021` → `decision HOLD` cho `lab250_95697c6d4612` → `release lab250_95697c6d4612_v2` với `parent lab250_95697c6d4612`.
 - `python scripts/lineage.py impact --release-id lab250_95697c6d4612` ra: `R-021: affected=True action=review_or_retrain`.
 - **Vì sao R-021 phải xem lại hoặc train lại:** R-021 đã học trên v1, trong đó có box lệch, box thiếu, lớp gán nhầm, box lặp, box tràn mép, và một cảnh rò giữa train và val. Sửa dataset thành v2 **không sửa được trọng số** model đã học. Model vẫn mang theo các nhãn sai, và điểm val cũ có thể bị thổi phồng vì `scene_214` rò. Vì vậy phải đánh giá lại R-021 trên dữ liệu sạch hoặc train lại trên v2. Lineage cho biết chính xác run nào bị ảnh hưởng, thay vì phải đoán.
-- **v2** (`lab250_95697c6d4612_v2`): 240 ảnh, 1645 nhãn. 10 ảnh lỗi nhãn detection hoặc thiếu file chuyển sang `rework_queue.csv`, giao đúng người gán và người kiểm theo `jobs.csv`. Đã sửa trong v2: hash, guideline theo job, split của `scene_214`. Ảnh chỉ lỗi panoptic ở lại v2 và được ghi trong README để báo team panoptic. `check_handover.py`: 17 PASS, 0 FAIL.
+- **v2** (`lab250_95697c6d4612_v2`): 239 ảnh, 1643 nhãn. 11 ảnh lỗi nhãn detection hoặc thiếu file chuyển sang `rework_queue.csv`, giao đúng người gán và người kiểm theo `jobs.csv`. Đã sửa trong v2: hash, guideline theo job, split của `scene_214`. Ảnh chỉ lỗi panoptic ở lại v2 và được ghi trong README để báo team panoptic. `check_handover.py`: 17 PASS, 0 FAIL.
 
 ## 4. Hash chứng minh gì, không chứng minh gì?
 **Chứng minh:**
@@ -65,8 +65,8 @@ Ticket của team AI nói mô hình hay bỏ sót `bottle` khi bị che hoặc n
 Đã đối chiếu: chạy lại bằng một đoạn kiểm độc lập ra đúng `tier_a`, `tier_b`, `notify` như `trace.json`; chạy thử trên seed 1234 và 4242 vẫn ra kết quả (lớp, cảnh, job tự đổi theo lô), nên dùng lại được cho đề ẩn. Trên seed 9999 (diễn tập, chưa từng chạy trước đó) script tự tìm ra lớp `bottle`, cảnh `scene_234`, `scene_392`, job cũ J01–J03 và ra tier_a 4 ảnh, tier_b 3 ảnh, notify A04, Q01.
 
 **Kiểm chéo v2** (`truyvet.csv`, `label_summary.csv`) bằng một đoạn kiểm độc lập với `make_v2.py`, chỉ đọc `delivery/` và gói v2:
-- `truyvet.csv`: 240 dòng, khớp đúng 240 ảnh trong `images/`, không trùng dòng. Mọi dòng có job, cảnh khớp `metadata.json`; annotator, reviewer, guideline khớp `jobs.csv` (J01–J04 là v1.2, J05–J10 là v1.3), kể cả 2 ảnh `guideline_mismatch` ở trên. Không còn cảnh nằm ở cả train và val; chỉ 1 cảnh đổi split so với v1 là `scene_214` (train → val, về split chiếm đa số).
-- `label_summary.csv`: 76 lớp, TOTAL = 1645, đếm lại từ `labels/` của v2 khớp từng lớp và khớp `README.txt` (240 ảnh, 1645 nhãn).
+- `truyvet.csv`: 239 dòng, khớp đúng 239 ảnh trong `images/`, không trùng dòng. Mọi dòng có job, cảnh khớp `metadata.json`; annotator, reviewer, guideline khớp `jobs.csv` (J01–J04 là v1.2, J05–J10 là v1.3), kể cả 2 ảnh `guideline_mismatch` ở trên. Không còn cảnh nằm ở cả train và val; chỉ 1 cảnh đổi split so với v1 là `scene_214` (train → val, về split chiếm đa số).
+- `label_summary.csv`: 76 lớp, TOTAL = 1643, đếm lại từ `labels/` của v2 khớp từng lớp và khớp `README.txt` (239 ảnh, 1643 nhãn).
 
 **Diễn tập đề ẩn** trên seed 9999 (`inject_release.py --seed 9999`): validator ra 9 lỗi luật và 10 ứng viên trong khoảng 19 giây, `trace_query.py` dưới 1 giây, viewer vẽ 10 ảnh chia 5 phần (2 ảnh/người) trong khoảng 2 giây, `merge_review.py` chạy được. Phần tự động mất chưa tới 1 phút, nên gần như toàn bộ 40 phút dành cho xem ảnh và ghi `review_log.csv`. Phần xem ảnh chưa diễn tập.
 
