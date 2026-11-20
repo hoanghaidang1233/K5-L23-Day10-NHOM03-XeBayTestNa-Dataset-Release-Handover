@@ -1,0 +1,76 @@
+{
+ "errors": [
+  {
+   "type": "bbox_drift",
+   "target": "img_0242"
+  },
+  {
+   "type": "bbox_out_of_bounds",
+   "target": "img_0108"
+  },
+  {
+   "type": "bbox_out_of_bounds",
+   "target": "img_0165"
+  },
+  {
+   "type": "category_swap",
+   "target": "img_0156"
+  },
+  {
+   "type": "class_swap",
+   "target": "img_0006"
+  },
+  {
+   "type": "class_swap",
+   "target": "img_0176"
+  },
+  {
+   "type": "class_swap",
+   "target": "img_0232"
+  },
+  {
+   "type": "guideline_mismatch",
+   "target": "img_0113"
+  },
+  {
+   "type": "instance_merge",
+   "target": "img_0043"
+  },
+  {
+   "type": "missing_box",
+   "target": "img_0098"
+  },
+  {
+   "type": "missing_box",
+   "target": "img_0130"
+  },
+  {
+   "type": "missing_box",
+   "target": "img_0218"
+  },
+  {
+   "type": "missing_image",
+   "target": "img_0060"
+  },
+  {
+   "type": "missing_image",
+   "target": "img_0153"
+  },
+  {
+   "type": "scene_leak",
+   "target": "scene_203"
+  },
+  {
+   "type": "thing_overlap",
+   "target": "img_0115"
+  },
+  {
+   "type": "thing_overlap",
+   "target": "img_0242"
+  },
+  {
+   "type": "wrong_hash",
+   "target": "img_0020"
+  }
+ ]
+}
